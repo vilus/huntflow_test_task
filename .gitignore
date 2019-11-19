@@ -1,0 +1,6 @@
+.idea
+.venv
+product
+.pytest_cache
+__pycache__
+states
