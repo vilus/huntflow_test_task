@@ -22,7 +22,7 @@ class HuntflowAPI:
         return s
 
     # TODO: add repeater
-    # TODO: cached
+    @functools.lru_cache(maxsize=128)
     def accounts(self):
         res = self.session.get(self.api_url + 'accounts')
         res.raise_for_status()
@@ -67,7 +67,7 @@ class HuntflowAPI:
         return items
 
     # TODO: add repeater
-    # TODO: cached
+    @functools.lru_cache(maxsize=128)
     def vacancy_statuses(self, account_id):
         res = self.session.get(self.api_url + f'account/{account_id}/vacancy/statuses')
         res.raise_for_status()

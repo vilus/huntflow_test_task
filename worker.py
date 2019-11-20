@@ -103,7 +103,7 @@ class Worker:
         vac_stats = self.api.vacancy_statuses(account_id)
         res = next((s for s in vac_stats if s['name'] == status), None)
         if not res:
-            raise WorkerError(f'failed to find status id by "{status}')
+            raise WorkerError(f'failed to find status id by "{status}"')
 
         return res['id']
 

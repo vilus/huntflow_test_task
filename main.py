@@ -6,6 +6,7 @@ from applicants_db import ApplicantsDBXLSX
 from huntflow_api import HuntflowAPI
 from states_storage import StatesStorage
 from worker import Worker
+from utils import GracefulInterruptHandler
 
 
 p = configargparse.ArgParser()
@@ -50,9 +51,13 @@ def main():
     states_storage = get_states_storage()
     worker = Worker(api, states_storage)
 
-    for applicant in db.get_applicants():
-        logging.debug(f'start processing: "{applicant}"')
-        worker.just_doit(applicant)
+    with GracefulInterruptHandler() as h:
+        for applicant in db.get_applicants():
+            if h.interrupted:  # It can be more precision if it wrapped sub steps
+                logging.debug('interrupted, exit')
+                break
+            logging.debug(f'start processing: "{applicant}"')
+            worker.just_doit(applicant)
 
 
 if __name__ == '__main__':
